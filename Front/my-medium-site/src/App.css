@@ -1,0 +1,13 @@
+#left {
+    padding: 2%;
+
+      background-color: violet;
+ }
+#right {
+    padding: 5%;
+    background-color: wheat;
+    min-height: 100vh;
+    overflow-y: hidden;
+    /* position: sticky;
+    top: 0; */
+} 

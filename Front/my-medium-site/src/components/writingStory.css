@@ -1,0 +1,73 @@
+.article{
+    font-family: Times, Times New Roman, Georgia, serif;
+}
+.myTextarea { 
+    border: none;
+    background-color: transparent;
+    resize: none;
+    outline: none;
+    overflow:hidden ;
+    min-width: 70%;  
+    min-height: 80vh;  
+    font-size: 1.25em;
+  }
+  .myTextarea:hover { 
+    overflow-y: auto;        
+  }
+  .myText{
+    font-weight: bolder;
+    font-size: 1.3em;
+    margin-bottom: 20px;
+    border: none;
+    background-color: transparent;
+    outline: none;
+    min-width: 70%;  
+  }
+  .otherText{
+    border: none;
+    background-color: transparent;
+    outline: none;
+    min-width: 70%;  
+  }
+
+
+.addImage .form-group
+{ 
+    padding-left:50%;
+    margin:1em;
+}
+.addImage input[type=file]
+{
+    outline:0;
+    opacity:0;
+    pointer-events:none;
+    user-select:none
+}
+.addImage .label
+{
+    width:120px;
+    border:2px dashed grey;
+    border-radius:5px;
+    display:block;
+    padding:1.2em;
+    transition:border 300ms ease;
+    cursor:pointer;
+    text-align:center
+}
+.addImage .label i{
+    display:block;
+    font-size:42px;
+    padding-bottom:16px
+}
+.addImage .label i,.addImage .label .title
+{
+    color:grey;
+    transition:200ms color
+}
+.addImage .label:hover
+{
+    border:2px solid #000
+}
+.addImage .label:hover i,.addImage .label:hover .title{
+    color:#000
+} 

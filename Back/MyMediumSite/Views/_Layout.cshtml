@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
+
+    <!--<link type="text/css" rel="stylesheet" href="~/Css/myStyle.css" />--> @*visualization*@
+    <!--<link type="text/css" rel="stylesheet" href="~/Css/font-awesome.min.css" />--> @*icons social networks*@
+    <!--<link type="text/css" rel="stylesheet" href="~/Css/animate.css" />--> @*animation*@
+    <!--<link type="text/css" rel="stylesheet" href="~/Css/validation.css" />-->
+
+    @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <!--<nav class="navbar navbar-expand-lg navbar-dark" style="background-color:#333;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="~/Home/index">BikeShop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="navbar-brand" href="~/Admin/index">Admin</a>
+                    </li>
+                    <li class="nav-item"></li>
+                </ul>-->
+                @*<div class="nav-item p-1" style="color:white;">Find by:</div>
+
+                <div class="d-flex justify-content-between">
+
+                    <div class="nav-item dropdown p-1">
+                        <select class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" name="FindBy" style="color:black;">
+                            <option selected value="Title">Title</option>
+                            <option value="Type">Type</option>
+                        </select>
+                    </div>
+                    <input class="form-control me-2" type="search" id="searchNav" placeholder="Search" name="Search" aria-label="Search">
+                    <button class="btn btn-outline-primary" id="searchButton">Search</button>
+                </div>*@
+                <!--<ul class="navbar-nav d-flex justify-content-end m-3">
+                    <li class="nav-item ml-1 mr-1">
+                        <a class="navbar-brand" href="~/Cart/Index">
+                            <img style="width:35px; height:30px;" src="~/images/cart.png" />
+                        </a>
+                    </li>
+                    <li class="nav-item ml-1 mr-1">
+                        <a href="~/User/UserAccount">
+                            <img class="rounded-circle" style="width:35px; height:35px;" src="~/images/user.png" />
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="ml-1 mr-1">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <span style="color:white;">@User.Identity.Name</span>
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                        <button type="submit" class="btn btn-danger">Logout</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </nav>-->
+
+
+    <div>
+        @RenderBody()
+    </div>
+
+    @*<a href="#" class="back-to-top">
+        <i class="bi bi-arrow-up">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+            </svg>
+        </i>
+    </a>*@
+
+    @*<div id="loader">
+        <div class="spinner">
+            <div class="double-bounce1"></div>
+            <div class="double-bounce2"></div>
+        </div>
+    </div>*@
+
+    @*<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>*@
+    <script src="~/Js/bootstrap.bundle.min.js"></script>
+    <script src="~/Js/jquery-min.js"></script>
+    @*<script src="~/Js/indexPartial.js"></script>
+    <script src="~/Js/searchBikeList.js"></script>
+    <script src="~/Js/mixitup.min.js"></script>
+    <script src="~/Js/owl.carousel.min.js"></script>
+    <script src="~/Js/wow.js"></script>
+    <script src="~/Js/jquery.counterup.min.js"></script>
+    <script src="~/Js/jquery.magnific-popup.min.js"></script>
+    <script src="~/Js/main.js"></script>*@
+</body>
+</html>
