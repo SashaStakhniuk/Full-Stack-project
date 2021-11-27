@@ -66,11 +66,9 @@ class AuthenticationRegistration extends React.Component{
         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
           <li>
               <div>
-                  <div className="mb-3" style={{width: '100%'}}>
+                  <div className="mb-3">
                   <div className="row g-0">
-                    <div className="col-md-4">
-                      <img src={this.state.user.profilePhoto} className="img-fluid rounded-circle p-1" alt="..."/>
-                    </div>
+                      <img src={this.state.user.profilePhoto} style={{padding:"1%",borderRadius:"6%"}} className="img-fluid w-100" alt="..."/>
                     <div className="col-md-8">
                       <div className="card-body">
                         <h6 className="card-title">{this.state.user.name}</h6>
@@ -90,7 +88,7 @@ class AuthenticationRegistration extends React.Component{
             <li><a className="dropdown-item" href="/">Stories</a></li>
             <li><a className="dropdown-item" href="/">Stats</a></li>
             <li><a className="dropdown-item" href="/">Design your profile</a></li>
-            <li><a className="dropdown-item" href="/">Settings</a></li>
+            <li><a className="dropdown-item" href="/aboutuser">Settings</a></li>
             <li><a className="dropdown-item" onClick={this.signOut} href="/" style={{color:"red"}}>Sign-Out</a></li>
             {/* <li><NavLink className="dropdown-item" onClick={this.signOut} to="/">Sign-Out</NavLink></li> */}
            

@@ -5,6 +5,7 @@ import {connect} from 'react-redux'
 import {GetCredentialsFromSessionStorage} from '../redux/actions/GetCredentialsFromSessionStorage'
 import './backgroundLogin.css';
 import './buttonStyle.css';
+import loadingAnimation from "../images/loadingAnimation.gif"
 // import fb from '../fb.png'
 // import google from '../google.png'
 
@@ -19,7 +20,8 @@ class Login extends React.Component{
         this.state={
             email:"",
             password:"",
-            error:""
+            error:"",
+            loading:""
         }
     }
     async makeRequest(){
@@ -44,7 +46,7 @@ class Login extends React.Component{
                         // <AuthenticationRegistration authorized={true}></AuthenticationRegistration>
                     } else {
                         // window.location = '/authorization'
-                        this.setState({error:"Invalid email or password"})
+                        this.setState({error:"Invalid email or password",loading:""})
                         console.log(response.status, response.errorText)
                     }
         
@@ -62,10 +64,19 @@ class Login extends React.Component{
         this.setState({
             email:email.value,
             password:password.value,
+            loading:loadingAnimation
+
         },()=>this.makeRequest())
     }
 
     render(){
+        var animation=""
+        if(this.state.loading!==""){
+            animation=
+            <div>
+                <img style={{width:"40px"}} src={this.state.loading} alt="..."/>
+            </div>
+        }
         return(
             <div>
                 <div className="centerDiv">
@@ -86,6 +97,7 @@ class Login extends React.Component{
                                         </div>
                                     </div>
                                 <div className="text-center">
+                                        {animation}
                                     <div style={{color:"red"}}>{this.state.error}</div>
                                     <button className="btn btn-success m-2" style={{minWidth:'60%'}}>Sign-In</button>
                                     {/* <a className="btn btn-success m-2" style={{minWidth:'60%'}} style={{textDecoration: 'none', color:'white'}} href="/">Sign-In</a> */}

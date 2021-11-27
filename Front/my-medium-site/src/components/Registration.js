@@ -1,10 +1,12 @@
 // import AuthenticationRegistration from './AuthenticationRegistration';
 import {NavLink} from "react-router-dom"
-// import { Redirect } from 'react-router';
+import {connect} from 'react-redux'
+import loadingAnimation from "../images/loadingAnimation.gif"
 
 import './backgroundRegister.css';
 
 import React from 'react'
+import { GetCredentialsFromSessionStorage } from "../redux/actions/GetCredentialsFromSessionStorage";
 class Registration extends React.Component{
     constructor(props){
         super(props)
@@ -16,7 +18,8 @@ class Registration extends React.Component{
             lastName:"",
             email:"",
             password:"",
-            confirmPassword:""
+            confirmPassword:"",
+            loading:""
         }
     }
     async makeRequest(){
@@ -31,10 +34,12 @@ class Registration extends React.Component{
 
             const data = await response.json()
                     if (response.ok === true) {
-                        sessionStorage.setItem('access_token', data.access_token)
-                        sessionStorage.setItem('userEmail', data.userEmail)
+                        sessionStorage.setItem('access_token', data.access_token);
+                        sessionStorage.setItem('userEmail', data.userEmail);
+                        this.props.setCredentials();
                         window.location = '/'
                     } else {
+                        this.setState({loading:""})
                         console.log("error " + response.status, response.errorText)
                     }
         }
@@ -48,6 +53,7 @@ class Registration extends React.Component{
         //console.log(e.target)
         const {userName, lastName, email, password,confirmPassword} = e.target
         this.setState({
+            loading:loadingAnimation,
             userName:userName.value,
             lastName:lastName.value,
             email:email.value,
@@ -82,6 +88,13 @@ class Registration extends React.Component{
     // }
 
     render(){
+        var animation=""
+        if(this.state.loading!==""){
+            animation=
+            <div>
+                <img style={{width:"40px"}} src={this.state.loading} alt="..."/>
+            </div>
+        }
         return(
             <div>
             <div className="centerRegister">
@@ -120,6 +133,7 @@ class Registration extends React.Component{
                                     </div>
                                 </div>
                             <div className="text-center">
+                                    {animation}
                                 <button className="btn btn-success m-2" style={{minWidth:'60%'}} data-bs-dismiss="modal">Sign-Up</button>
                             </div>                
                         </form>
@@ -141,4 +155,17 @@ class Registration extends React.Component{
         );
     }
 }
-export default Registration;
+function mapStateToProps(state){
+    console.log(state.credentials)
+        return {
+            credentials: state.credentials
+        }
+    }
+    function mapDispatchToProps(dispatch){
+        return{
+            setCredentials:()=>dispatch({type:GetCredentialsFromSessionStorage})
+        }
+      };
+        
+export default connect(mapStateToProps,mapDispatchToProps)(Registration)
+// export default Registration;
