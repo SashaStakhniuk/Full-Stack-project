@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyMediumSite.Models;
@@ -16,9 +17,14 @@ namespace MyMediumSite.Controllers.API
     public class UserController : Controller
     {
         private readonly IdentityContext context;
-        public UserController(IdentityContext context)
+        private readonly UserManager<User> userManager;
+        private readonly DatasContext datasContext;
+        public UserController(IdentityContext context, UserManager<User> userManager, DatasContext datasContext)
         {
             this.context = context;
+            this.userManager = userManager;
+            this.datasContext = datasContext;
+
         }
 
         [HttpGet]
@@ -26,15 +32,17 @@ namespace MyMediumSite.Controllers.API
         {
             return await context.Users.ToListAsync();
         }
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> Get(string id)
+        [HttpGet("{email}")]
+        public async Task<ActionResult<Profile>> Get(string email)
         {
-            User user = await context.Users.FirstOrDefaultAsync(x => x.Id == id);
-            if (user == null)
+            var user = await userManager.FindByEmailAsync(email);
+            if (user != null)
             {
-                return NotFound();
+                var profile = datasContext.Profiles.ToList().Find(x => x.UserId == user.Id);
+                //var profile = datasContext.Posts.ToList().FirstOrDefault();
+                return Ok(profile);
             }
-            return Ok(user);
+            return NotFound();
         }
         [HttpPost]
         public async Task<ActionResult<User>> Post(User user)

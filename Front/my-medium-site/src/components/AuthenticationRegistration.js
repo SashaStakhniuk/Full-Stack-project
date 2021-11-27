@@ -1,33 +1,61 @@
 // import {Switch,NavLink,Route, BrowserRouter as Router} from "react-router-dom"
 import {NavLink} from "react-router-dom"
 import React from 'react'
+import {connect} from 'react-redux'
+
 class AuthenticationRegistration extends React.Component{
     constructor(props){
         super(props)
-        this.update= this.update.bind(this)
+        this.signOut= this.signOut.bind(this)
+        this.fetchUserApi= this.fetchUserApi.bind(this)
+        this.url="https://localhost:44361/api/user"
+
         this.state={
-            isAuthenticated:false
+            isAuthenticated:false,
+            email:"",
+            token:"",
+            user:[]
         }
     }
-    update(){
-        const token = sessionStorage.getItem('access_token')
-        if(token){
-            this.setState({
-                isAuthenticated:true
-            })
-        }
-        else{
-            this.setState({
-                isAuthenticated:false
-            })
-        }
+    fetchUserApi = async function(url){
+                  const response=await fetch(url+"/"+this.props.credentials.email, {
+                      method: 'GET',
+                      headers: {
+                          'Authorization': 'bearer ' + this.props.credentials.tokenKey
+                      }
+                  })
+                  // console.log(response)
+                  const result = await response.json()
+                  if (response.ok === true) {
+                      this.setState({
+                          user:result
+                      })
+                      console.log(result)
+                  }
+                  else{
+                      console.log(result)
+                  }
+              }
+              
+     signOut=()=>{
+      sessionStorage.removeItem('access_token')
+      sessionStorage.removeItem('userEmail')
+      this.setState({isAuthenticated:false})
     }
     componentDidMount(){
-        this.update()       
+
+        if(this.props.credentials.email){
+          this.setState({
+            isAuthenticated:true
+          },()=>this.fetchUserApi(this.url))
+        // },()=>console.log(this.state))
+        }
+        else{
+          this.setState({
+            isAuthenticated:false
+          })
+        }     
     }
-    // componentDidUpdate(){
-    //     this.update()        
-    // }
 
     render(){
         const logined=
@@ -38,15 +66,15 @@ class AuthenticationRegistration extends React.Component{
         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
           <li>
               <div>
-                  <div className="card mb-3" style={{width: '100%'}}>
+                  <div className="mb-3" style={{width: '100%'}}>
                   <div className="row g-0">
                     <div className="col-md-4">
-                      <img src="..." className="img-fluid rounded-start" alt="..."/>
+                      <img src={this.state.user.profilePhoto} className="img-fluid rounded-circle p-1" alt="..."/>
                     </div>
                     <div className="col-md-8">
                       <div className="card-body">
-                        <h6 className="card-title">UserName</h6>
-                        <p className="card-text">userURL</p>
+                        <h6 className="card-title">{this.state.user.name}</h6>
+                        <p className="card-text">{this.state.user.nickName}</p>
                       </div>
                     </div>
                   </div>
@@ -63,7 +91,10 @@ class AuthenticationRegistration extends React.Component{
             <li><a className="dropdown-item" href="/">Stats</a></li>
             <li><a className="dropdown-item" href="/">Design your profile</a></li>
             <li><a className="dropdown-item" href="/">Settings</a></li>
-            <li><a className="dropdown-item" href="/">Sign-Out</a></li>
+            <li><a className="dropdown-item" onClick={this.signOut} href="/" style={{color:"red"}}>Sign-Out</a></li>
+            {/* <li><NavLink className="dropdown-item" onClick={this.signOut} to="/">Sign-Out</NavLink></li> */}
+           
+
         </ul>
       </div>
       const unauthorize=
@@ -88,4 +119,18 @@ class AuthenticationRegistration extends React.Component{
         );
     }
 }
-export default AuthenticationRegistration;
+function mapStateToProps(state){
+    console.log(state.credentials)
+        return {
+            credentials: state.credentials
+        }
+    }
+
+    // function mapDispatchToProps(dispatch){
+    //     return{
+    //         addToDoItem: (itemToAdd)=>dispatch(addToDoItem(itemToAdd))
+    //     }
+    //   };
+        
+// export default connect(mapStateToProps,mapDispatchToProps)(AuthenticationRegistration)
+export default connect(mapStateToProps)(AuthenticationRegistration)

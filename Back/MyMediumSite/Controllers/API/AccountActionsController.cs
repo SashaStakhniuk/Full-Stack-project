@@ -94,7 +94,7 @@ namespace MyMediumSite.Controllers.API
                 //}
                 //else
                // {
-                    User user = new User { Email = model.Email, UserName = model.UserName, LastName = model.LastName, NickName = "@" + model.Email.Substring(0, model.Email.IndexOf('@')) };
+                    User user = new User { Email = model.Email, UserName = model.UserName, LastName = model.LastName};
                     var result = await userManager.CreateAsync(user, model.Password);
 
                     if (result.Succeeded)

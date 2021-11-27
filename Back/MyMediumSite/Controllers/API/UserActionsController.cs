@@ -24,16 +24,16 @@ namespace MyMediumSite.Controllers.API
     {
         //private readonly RoleManager<IdentityRole> roleManager;
 
-        //private readonly UserManager<User> userManager;
+        private readonly UserManager<User> userManager;
         //private readonly SignInManager<User> signInManager;
         private readonly IdentityContext identityContext;
         private readonly DatasContext datasContext;
 
-        public UserActionsController(DatasContext datasContext, IdentityContext identityContext /*UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager,*/ )
+        public UserActionsController(DatasContext datasContext, IdentityContext identityContext, UserManager<User> userManager/*, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager,*/ )
         {
-        //    this.userManager = userManager;
-        //    this.roleManager = roleManager;
-        //    this.signInManager = signInManager;
+            this.userManager = userManager;
+            //    this.roleManager = roleManager;
+            //    this.signInManager = signInManager;
             this.identityContext = identityContext;
             this.datasContext = datasContext;
 
@@ -67,5 +67,32 @@ namespace MyMediumSite.Controllers.API
             //}
            // return BadRequest(model);
         }
+        [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> AddUserDatas(ProfileViewModel model)
+        {
+            //if (ModelState.IsValid)
+            //{
+            //var userId = identityContext.Users.ToList().Where(x => x.Email == model.Email).Select(x => x.Id).FirstOrDefault();
+           var user= await userManager.FindByEmailAsync(model.Email);
+            if (user != null)
+            {
+                datasContext.Profiles.Add(new Profile { User = user,
+                                                        AboutProfile=model.AboutProfile,ProfilePhoto=model.ProfilePhoto,
+                                                        Name=user.UserName,
+                                                        NickName = "@" + model.Email.Substring(0, model.Email.IndexOf('@'))
+                });
+                datasContext.SaveChanges();
+                return Ok(model);
+            }
+            else
+            {
+                ModelState.AddModelError("", "Wrong datas");
+                return BadRequest(ModelState);
+            }
+            //}
+            // return BadRequest(model);
+        }
+        
     }
 }

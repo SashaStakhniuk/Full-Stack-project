@@ -5,16 +5,13 @@ class App extends React.Component {
   constructor(props){
     super(props)
     this.getPosts=this.getPosts.bind(this)
-    this.showPosts=this.showPosts.bind(this)
     this.url="https://localhost:44361/api/useractions/GetAllPosts"
     this.state={
-      posts:[],
-      postItems:''
+      posts:[]
     }
   }
 componentDidMount(){
-  this.getPosts()
-  //this.showPosts()
+  //this.getPosts()
 }
   async getPosts() {
     //const token = sessionStorage.getItem(tokenKey)
@@ -29,13 +26,6 @@ componentDidMount(){
 
         }
 }
-showPosts(){
-
-// const postItems = this.state.posts.map((post)=>
-//       <div>{post.theme}</div> 
-//     )
-//     this.setState({postItems})
-}
 render(){
   return (
     <div className="d-flex">
@@ -43,7 +33,7 @@ render(){
         Main Page
         {this.state.posts.map((post)=>
         <div>
-          <div className="card mb-3 w-100" >
+          <div className="mb-3 w-100"  style={{backgroundColor:"inherit"}}>
             <div className="row g-0">
               
               <div className="col-md-8">

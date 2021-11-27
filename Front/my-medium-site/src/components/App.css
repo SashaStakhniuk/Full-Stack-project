@@ -4,7 +4,8 @@
       background-color: violet;
  }
 #right {
-    padding: 5%;
+    padding: 3%;
+
     background-color: wheat;
     min-height: 100vh;
     overflow-y: hidden;

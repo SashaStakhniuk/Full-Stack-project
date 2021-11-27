@@ -10,6 +10,7 @@ namespace MyMediumSite.Models
     {
         public DatasContext(DbContextOptions<DatasContext> options) : base(options)
         {
+            //Database.EnsureDeleted();////////видалити
             Database.EnsureCreated();
         }
         //public DbSet<Person> Persons { get; set; }

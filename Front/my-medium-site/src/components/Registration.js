@@ -33,6 +33,7 @@ class Registration extends React.Component{
                     if (response.ok === true) {
                         sessionStorage.setItem('access_token', data.access_token)
                         sessionStorage.setItem('userEmail', data.userEmail)
+                        window.location = '/'
                     } else {
                         console.log("error " + response.status, response.errorText)
                     }
