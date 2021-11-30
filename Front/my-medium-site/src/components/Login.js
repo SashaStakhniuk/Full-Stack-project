@@ -6,10 +6,12 @@ import {GetCredentialsFromSessionStorage} from '../redux/actions/GetCredentialsF
 import './backgroundLogin.css';
 import './buttonStyle.css';
 import loadingAnimation from "../images/loadingAnimation.gif"
+// import SetUserCredentials from "../redux/action_creators/SetUserCredentials"
 // import fb from '../fb.png'
 // import google from '../google.png'
 
 import React from 'react'
+// import GoogleLoginClass from "./GoogleLogin";
 // import AuthenticationRegistration from "./AuthenticationRegistration";
 class Login extends React.Component{
     constructor(props){
@@ -38,9 +40,10 @@ class Login extends React.Component{
                     const data = await response.json()
                     if (response.ok === true) {
                         console.log(data)
-                        sessionStorage.setItem('access_token', data.access_token);
-                        sessionStorage.setItem('userEmail', data.userEmail);
-                        this.props.setCredentials();
+                         sessionStorage.setItem('access_token', data.access_token);
+                         sessionStorage.setItem('userId', data.userId);
+                        //  sessionStorage.setItem('userEmail', data.userEmail);
+                        //this.props.setCredentials(data.access_token,data.userId);
                         this.setState({error:""})
                         window.location = '/'
                         // <AuthenticationRegistration authorized={true}></AuthenticationRegistration>
@@ -105,10 +108,14 @@ class Login extends React.Component{
                                 </div>                
                             </form>
                            
-                            <div className="d-flex flex-column m-1">
-                                <button type="button" className="login-with-google-btn m-1" >
+                            {/* <div className="d-flex flex-column m-1"> */}
+                            <div className="d-flex flex-row justify-content-around m-1">
+                                {/* <GoogleLoginClass/> */}
+                                {/* <GoogleLoginClass/> */}
+
+                                {/* <button type="button" className="login-with-google-btn m-1" >
                                     Sign in with Google
-                                </button>
+                                </button> */}
                                     {/* <div class="effect aeneas">
                                         <div className="buttons">
                                         <a href={"s"}  className="fb" title="Log-In with Facebook"><i><img style={{width:"100%"}} src={fb} alt="fb"></img></i></a>
@@ -139,6 +146,7 @@ function mapStateToProps(state){
     }
     function mapDispatchToProps(dispatch){
         return{
+            // setCredentials:(tokenKey,userId)=>dispatch(SetUserCredentials(tokenKey,userId))
             setCredentials:()=>dispatch({type:GetCredentialsFromSessionStorage})
         }
       };

@@ -2,6 +2,7 @@
 import {NavLink} from "react-router-dom"
 import React from 'react'
 import {connect} from 'react-redux'
+// import { GoogleLogout } from "react-google-login"
 
 class AuthenticationRegistration extends React.Component{
     constructor(props){
@@ -12,13 +13,14 @@ class AuthenticationRegistration extends React.Component{
 
         this.state={
             isAuthenticated:false,
-            email:"",
-            token:"",
+            // email:"",
+            // userId:"",
+            // token:"",
             user:[]
         }
     }
     fetchUserApi = async function(url){
-                  const response=await fetch(url+"/"+this.props.credentials.email, {
+                  const response=await fetch(url+"/"+this.props.credentials.userId, {
                       method: 'GET',
                       headers: {
                           'Authorization': 'bearer ' + this.props.credentials.tokenKey
@@ -39,12 +41,13 @@ class AuthenticationRegistration extends React.Component{
               
      signOut=()=>{
       sessionStorage.removeItem('access_token')
-      sessionStorage.removeItem('userEmail')
+      sessionStorage.removeItem('userId')
+      // sessionStorage.removeItem('userEmail')
       this.setState({isAuthenticated:false})
     }
     componentDidMount(){
 
-        if(this.props.credentials.email){
+        if(this.props.credentials.userId){
           this.setState({
             isAuthenticated:true
           },()=>this.fetchUserApi(this.url))
@@ -88,7 +91,8 @@ class AuthenticationRegistration extends React.Component{
             <li><a className="dropdown-item" href="/">Stories</a></li>
             <li><a className="dropdown-item" href="/">Stats</a></li>
             <li><a className="dropdown-item" href="/">Design your profile</a></li>
-            <li><a className="dropdown-item" href="/aboutuser">Settings</a></li>
+            <li><a className="dropdown-item" href="/userdatassettings">Settings</a></li>
+            {/* <li><a><GoogleLogout clientId="338527283984-4obsta667or3gv1da803kpjk7p6g2rec.apps.googleusercontent.com" buttonText="Logout" onLogoutSuccess={logout}></GoogleLogout></a></li> */}
             <li><a className="dropdown-item" onClick={this.signOut} href="/" style={{color:"red"}}>Sign-Out</a></li>
             {/* <li><NavLink className="dropdown-item" onClick={this.signOut} to="/">Sign-Out</NavLink></li> */}
            
@@ -118,7 +122,7 @@ class AuthenticationRegistration extends React.Component{
     }
 }
 function mapStateToProps(state){
-    console.log(state.credentials)
+    //console.log(state.credentials)
         return {
             credentials: state.credentials
         }
@@ -132,3 +136,4 @@ function mapStateToProps(state){
         
 // export default connect(mapStateToProps,mapDispatchToProps)(AuthenticationRegistration)
 export default connect(mapStateToProps)(AuthenticationRegistration)
+// export default AuthenticationRegistration

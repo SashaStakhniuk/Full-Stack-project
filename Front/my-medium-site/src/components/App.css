@@ -1,3 +1,9 @@
+
+/* text{
+    box-sizing: border-box;
+    color: rgb(8, 8, 8);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', sans-serif;
+} */
 #left {
     padding: 2%;
 
@@ -12,3 +18,21 @@
     /* position: sticky;
     top: 0; */
 } 
+/* .backimage{
+    background-image: url("../images/back2.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+} */
+.centered {
+background-image: url("../images/back2.jpg");
+line-height: 100vh;
+ text-align: center;
+ /*
+ position: fixed;
+ top: 50%;
+ left: 50%;
+ width: 200px;
+ height:100px;
+ margin: -50px 0 0 -100px; */
+}

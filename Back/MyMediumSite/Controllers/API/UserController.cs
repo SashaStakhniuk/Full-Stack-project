@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace MyMediumSite.Controllers.API
 {
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]")]
     public class UserController : Controller
     {
@@ -32,13 +32,13 @@ namespace MyMediumSite.Controllers.API
         {
             return await context.Users.ToListAsync();
         }
-        [HttpGet("{email}")]
-        public async Task<ActionResult<Profile>> Get(string email)
+
+        [HttpGet("{id}")]
+        public ActionResult<Profile> Get(string id)
         {
-            var user = await userManager.FindByEmailAsync(email);
-            if (user != null)
+            if (id != null)
             {
-                var profile = datasContext.Profiles.ToList().Find(x => x.UserId == user.Id);
+                var profile = datasContext.Profiles.ToList().Find(x => x.UserId == id);
                 //var profile = datasContext.Posts.ToList().FirstOrDefault();
                 return Ok(profile);
             }

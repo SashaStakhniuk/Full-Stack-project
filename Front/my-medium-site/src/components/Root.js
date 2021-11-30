@@ -11,9 +11,13 @@ import AuthenticationRegistration from './AuthenticationRegistration';
 import NotFound from './NotFound';
 import Registration from './Registration';
 import Login from './Login';
-import logo from './MediumLogo2.png'
+// import logo from './MediumLogo2.png'
+import logo from '../images/mediumLogoWhite.webp'
+
 import WriteAStory from './WriteAStory';
 import UserPage from './UserPage';
+import AboutUser from './AboutUser';
+import Tag from './Tag';
 
 
 const Root = ({ store }) => (
@@ -61,6 +65,9 @@ const Root = ({ store }) => (
           <li className="nav-item">
             <NavLink activeClassName="activeLink" className="textDecoration" to="/users">Users</NavLink>
           </li>
+          {/* <li className="nav-item">
+            <NavLink to="/userdatassettings">Settings</NavLink>
+          </li> */}
         </ul>
       </div>
     </div>
@@ -73,7 +80,9 @@ const Root = ({ store }) => (
   <Route path="/authorization" component={Registration}></Route>
   <Route path="/authentication" component={Login}></Route>
   <Route path="/writingstory" component={WriteAStory}></Route>
-  <Route path="/aboutuser" component={UserPage}></Route>
+  <Route path="/userdatassettings" component={UserPage}></Route>
+  <Route path="/aboutUser/:id" component={AboutUser}></Route>
+  <Route path="/tag/:title" component={Tag}></Route>
 
 
   <Route component={NotFound}></Route>

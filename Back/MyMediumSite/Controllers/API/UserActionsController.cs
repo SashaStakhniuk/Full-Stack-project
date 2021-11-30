@@ -44,6 +44,16 @@ namespace MyMediumSite.Controllers.API
         {
             return await datasContext.Posts.ToListAsync();
         }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Profile>>> GetProfiles()
+        {
+            return await datasContext.Profiles.ToListAsync();
+        }
+        [HttpGet("{theme}")]
+        public async Task< ActionResult<IEnumerable<Posts>>> GetPostsByTheme(string theme)
+        {
+            return await datasContext.Posts.Where(x=> x.Theme.ToLower()==theme.ToLower()).ToListAsync();
+        }
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -51,11 +61,11 @@ namespace MyMediumSite.Controllers.API
         {
             //if (ModelState.IsValid)
             //{
-            var userId = identityContext.Users.ToList().Where(x => x.Email == model.Email).Select(x => x.Id).FirstOrDefault();
+            //var userId = identityContext.Users.ToList().Where(x => x.Email == model.Email).Select(x => x.Id).FirstOrDefault();
 
-            if (userId != null)
+            if (model.UserId != null)
             {
-                datasContext.Posts.Add(new Posts { Id = userId, Theme = model.Theme, Header = model.Header, Description = model.Description, PostPhoto = model.PostPhoto, Article = model.Article });
+                datasContext.Posts.Add(new Posts { Id = model.UserId, Theme = model.Theme, Header = model.Header, Description = model.Description, PostPhoto = model.PostPhoto, Article = model.Article });
                 datasContext.SaveChanges();
                 return Ok(model);
             }
@@ -79,7 +89,7 @@ namespace MyMediumSite.Controllers.API
             {
                 datasContext.Profiles.Add(new Profile { User = user,
                                                         AboutProfile=model.AboutProfile,ProfilePhoto=model.ProfilePhoto,
-                                                        Name=user.UserName,
+                                                        Name=user.UserName+" "+user.LastName,
                                                         NickName = "@" + model.Email.Substring(0, model.Email.IndexOf('@'))
                 });
                 datasContext.SaveChanges();
@@ -93,6 +103,7 @@ namespace MyMediumSite.Controllers.API
             //}
             // return BadRequest(model);
         }
-        
+
+
     }
 }

@@ -35,7 +35,8 @@ class Registration extends React.Component{
             const data = await response.json()
                     if (response.ok === true) {
                         sessionStorage.setItem('access_token', data.access_token);
-                        sessionStorage.setItem('userEmail', data.userEmail);
+                        sessionStorage.setItem('userId', data.userId);
+                        // sessionStorage.setItem('userEmail', data.userEmail);
                         this.props.setCredentials();
                         window.location = '/'
                     } else {
@@ -60,32 +61,8 @@ class Registration extends React.Component{
             password:password.value,
             confirmPassword:confirmPassword.value
         },()=>this.makeRequest())
-        // return <Redirect push to="/" />
       }
 
-    //   async getTokenAsync() {
-    //     var tokenKey = "access_token"
-
-    //     const credentials = {
-    //         email: document.getElementById('email').value,
-    //         password: document.getElementById('password').value
-    //     }
-    
-    //     const response = await fetch('/api/accountjwt/token', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(credentials)
-    //     })
-    
-    //     const data = await response.json()
-    //     if (response.ok === true) {
-    //         sessionStorage.setItem(tokenKey, data.access_token)
-    //     } else {
-    //         console.log(response.status, response.errorText)
-    //     }
-    // }
 
     render(){
         var animation=""

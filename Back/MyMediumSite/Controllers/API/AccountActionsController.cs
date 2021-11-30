@@ -147,7 +147,7 @@ namespace MyMediumSite.Controllers.API
                         return Json(new
                         {
                             access_token = encodedJwt,
-                            userEmail=model.Email
+                            userId=user.Id
                         });
                     }
                     return Ok();

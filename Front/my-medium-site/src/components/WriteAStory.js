@@ -20,7 +20,8 @@ class WriteAStory extends React.Component{
             description:"",
             postphoto:"",
             article:"",
-            email:""
+            userId:""
+            // email:""
             // usernickname:"example",
             // userid:"example"
             // file: null
@@ -75,7 +76,7 @@ class WriteAStory extends React.Component{
         // });
       };
  sendDatasOnServer = async function(url){
-
+  console.log(this.props.credentials.tokenKey)
                 const response=await fetch(url, {
                     method: 'POST',
                     headers: {
@@ -83,10 +84,10 @@ class WriteAStory extends React.Component{
                         'Authorization': 'bearer ' + this.props.credentials.tokenKey
                     },
                     body:JSON.stringify(this.state)
-                })
-                console.log(JSON.stringify(this.state))
+                });
+               // console.log(JSON.stringify(this.state))
 
-                console.log(response.json())
+                console.log(await response.json())
             }
             
 async handleForm(e) {
@@ -100,13 +101,22 @@ async handleForm(e) {
         header:header.value,
         description:description.value,
         article:article.value,
-        email:this.props.credentials.email
+        userId:this.props.credentials.userId
+        // email:this.props.credentials.email
       // },()=>console.log(this.state))
     },()=>this.sendDatasOnServer(this.url))
 }
 
         render(){
+          var photoHere=""
 
+          if(this.state.postphoto){
+             photoHere=
+            <div className="w-50">
+              <img className="w-50 rounded" src={this.state.postphoto} alt="..."></img>
+            </div>
+          }
+           
             return(
 
                 <div>
@@ -114,12 +124,12 @@ async handleForm(e) {
                                 <div className="text-end">
                                     <button className="btn btn-success m-2" style={{minWidth:'25%'}}>Publish</button>
                                 </div>    
-                                    <input type="text" defaultValue="example" placeholder="Theme" className="otherText" name="theme"/>
+                                    <input type="text"  placeholder="Theme" className="otherText" name="theme"/>
 
                                     <div className="article">
-                                            <input type="text" defaultValue="example" className="myText" placeholder="Title" name="header"/>
-                                            <input type="text" defaultValue="example" className="otherText" placeholder="Chort description" name="description"/>
-
+                                            <input type="text"  className="myText" placeholder="Title" name="header"/>
+                                            <input type="text"  className="otherText" placeholder="Chort description" name="description"/>
+                                              <div className="d-flex justify-content-around">
                                             <div className="addImage">
                                                 <div className="form-group">
                                                     <label className="label">
@@ -129,9 +139,10 @@ async handleForm(e) {
                                                     </label>
                                                 </div>
                                             </div>
-                                           
+                                              {photoHere}
+                                            </div>
                                             {/* <input name="photo_Base64" type="file" className="form-control" /> */}
-                                            <textarea className="myTextarea" defaultValue="example"  placeholder="Article" name="article"/>
+                                            <textarea className="myTextarea"  placeholder="Article" name="article"/>
                                     </div>
                                           
                             </form>

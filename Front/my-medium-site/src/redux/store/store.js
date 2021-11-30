@@ -3,10 +3,14 @@ import SetCredentialsReducer from '../reducers/SetCredentialsReducer'
 
 const credentials={
     tokenKey:sessionStorage.getItem("access_token"),
-    email:sessionStorage.getItem("userEmail"),
+    userId:sessionStorage.getItem("userId")
+    // email:sessionStorage.getItem("userEmail"),
 }
 const InitialStore={
-    credentials
+    credentials,
+    posts:[]
+    // credentials,
+    // posts:[]
 }
 
 const store=createStore(SetCredentialsReducer,InitialStore)
