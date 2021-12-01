@@ -11,11 +11,15 @@ namespace MyMediumSite.Models
         public User()
         {
             Posts = new HashSet<Posts>();
+            Subscribers = new HashSet<Subscriber>();
         }
         public string LastName { get; set; }
 
         public Profile Profile { get; set; }
 
         public ICollection<Posts> Posts;
+        //public Subscribers Subscribers { get; set; }
+
+        public ICollection<Subscriber> Subscribers;
     }
 }

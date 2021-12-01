@@ -119,18 +119,19 @@ namespace MyMediumSite.Controllers.API
                         await userManager.AddToRolesAsync(user, role);
                         await signInManager.SignInAsync(user, false);
 
-                    //    string id = await userManager.GetUserIdAsync(user);
-                        //Person personToAdd = new Person
-                        //{
-                        //    PersonId = id,
-                        //    NickName = "@" + user.Email.Substring(0, user.Email.IndexOf('@'))
-                        //};
-                        //personContext.Persons.Add(personToAdd);
-                        //personContext.SaveChanges();
 
-                    //var result = await signInManager.PasswordSignInAsync(user.UserName, model.Password, false, false);
                     if (user != null)
                     {
+                            datasContext.Profiles.Add(new Profile
+                            {
+                                User = user,
+                                //AboutProfile = model.AboutProfile,
+                                //ProfilePhoto = model.ProfilePhoto,
+                                Name = user.UserName + " " + user.LastName,
+                                NickName = "@" + user.Email.Substring(0, user.Email.IndexOf('@'))
+                            });
+                            datasContext.SaveChanges();
+                        
                         var identity = await GetIdentity(user.Email, model.Password);
                         if (identity == null)
                         {

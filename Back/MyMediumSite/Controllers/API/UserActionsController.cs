@@ -44,6 +44,12 @@ namespace MyMediumSite.Controllers.API
         {
             return await datasContext.Posts.ToListAsync();
         }
+        // [HttpGet]
+        //public async Task<ActionResult<IEnumerable<Posts>>> GetAllPosts()
+        //{
+        //    List<Posts> post = datasContext.Posts.ToList().Reverse();   
+        //    return await datasContext.Posts.ToList().Reverse();
+        //}
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Profile>>> GetProfiles()
         {
@@ -54,7 +60,23 @@ namespace MyMediumSite.Controllers.API
         {
             return await datasContext.Posts.Where(x=> x.Theme.ToLower()==theme.ToLower()).ToListAsync();
         }
-
+        [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> Subscribe(SubscribeViewModel model)
+        {
+            if (model.SubscribeOnId != null)
+            {
+                var user = await userManager.FindByIdAsync(model.SubscriberId);
+                if (user != null)
+                {
+                    datasContext.Subscribers.Add(new Subscriber {UserId= model.SubscriberId, /*SubscriberId = model.SubscriberId*/ SubscribeToId = model.SubscribeOnId });
+                    datasContext.SaveChanges();
+                    return Ok(model);
+                }
+               
+            }
+            return NotFound(model);
+        }
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult AddNewStory(PostsViewModel model)
@@ -84,14 +106,19 @@ namespace MyMediumSite.Controllers.API
             //if (ModelState.IsValid)
             //{
             //var userId = identityContext.Users.ToList().Where(x => x.Email == model.Email).Select(x => x.Id).FirstOrDefault();
-           var user= await userManager.FindByEmailAsync(model.Email);
+            var user = await userManager.FindByIdAsync(model.UserId);
             if (user != null)
             {
-                datasContext.Profiles.Add(new Profile { User = user,
-                                                        AboutProfile=model.AboutProfile,ProfilePhoto=model.ProfilePhoto,
-                                                        Name=user.UserName+" "+user.LastName,
-                                                        NickName = "@" + model.Email.Substring(0, model.Email.IndexOf('@'))
-                });
+                //datasContext.Profiles.Add(new Profile { User = user,
+                //                                        AboutProfile=model.AboutProfile,ProfilePhoto=model.ProfilePhoto,
+                //                                        Name=user.UserName+" "+user.LastName,
+                //                                        NickName = "@" + user.Email.Substring(0, user.Email.IndexOf('@'))
+                //});
+                var profileToEdit = datasContext.Profiles.ToList().Find(x=> x.UserId==model.UserId);
+                profileToEdit.AboutProfile = model.AboutProfile;
+                profileToEdit.ProfilePhoto = model.ProfilePhoto;
+                
+                datasContext.Profiles.Update(profileToEdit);
                 datasContext.SaveChanges();
                 return Ok(model);
             }

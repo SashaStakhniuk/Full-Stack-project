@@ -7,8 +7,11 @@ class AboutUser extends React.Component{
         super(props)
         this.getPosts=this.getPosts.bind(this)
         this.getProfile=this.getProfile.bind(this)
+        this.subscribe=this.subscribe.bind(this)
         this.getProfileUrl="https://localhost:44361/api/user/"
         this.getPostsUrl="https://localhost:44361/api/useractions/GetAllPosts"
+        this.subscribeUrl="https://localhost:44361/api/useractions/Subscribe"
+
 
         this.state={
             profile:[],
@@ -84,11 +87,36 @@ class AboutUser extends React.Component{
                 }
             }
             
+subscribe=async (subscribeOnId)=>{
+    console.log(subscribeOnId);
+    const datas={
+        subscriberId:this.props.credentials.userId,
+        subscribeOnId
+    }
+    console.log(datas);
+    console.log(this.props.credentials.tokenKey)
+    const response=await fetch(this.subscribeUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'bearer ' + this.props.credentials.tokenKey
+        },
+        body:JSON.stringify(datas)
+    })
+    //console.log(JSON.stringify(this.state))
+
+    console.log(await response.json())
+}
         render(){
-            let followButton=
-            this.state.profile.userId!==this.props.credentials.userId?
-            <button className="btn btn-success" style={{borderRadius:"20px"}}>Follow</button>
-            :"";
+            let followButton=""
+            console.log(this.props.credentials.userId)
+            if(this.props.credentials.userId!==null){
+                 followButton=
+                this.state.profile.userId!==this.props.credentials.userId?
+                <button className="btn btn-success" onClick={()=>this.subscribe(this.state.profile.userId)} style={{borderRadius:"20px"}}>Follow</button>
+                :"";
+            }
+          
             return(
 
                 <div>

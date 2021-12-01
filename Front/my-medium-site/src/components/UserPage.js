@@ -12,13 +12,13 @@ class UserPage extends React.Component{
         this.state={
             aboutprofile:"",
             profilePhoto:"",
-            email:""
+            userId:""
         }
     }
     componentDidMount(){
         this.setState({
             // email:this.props.email
-            email:sessionStorage.getItem("userEmail")
+            userId:sessionStorage.getItem("userId")
         })
         this.token=sessionStorage.getItem("access_token")
     }
@@ -76,7 +76,7 @@ class UserPage extends React.Component{
         })
         //console.log(JSON.stringify(this.state))
 
-        console.log(response.json())
+        console.log(await response.json())
     }
     
     render(){

@@ -16,5 +16,7 @@ namespace MyMediumSite.Models
         //public DbSet<Person> Persons { get; set; }
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Posts> Posts { get; set; }
+        public DbSet<Subscriber> Subscribers { get; set; }
+
     }
 }

@@ -7,13 +7,9 @@ using System.Threading.Tasks;
 
 namespace MyMediumSite.Models
 {
-    public class ProfileViewModel
+    public class SubscribeViewModel
     {
-        public string AboutProfile { get; set; }
-        public string ProfilePhoto { get; set; }
-        public string Email { get; set; }
-
-        public string UserId {get; set; }
-
+        public string SubscriberId { get; set; }
+        public string SubscribeOnId { get; set; }
     }
 }
