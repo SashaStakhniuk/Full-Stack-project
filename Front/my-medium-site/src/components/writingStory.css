@@ -30,11 +30,13 @@
     min-width: 70%;  
   }
 
-
+/* body {
+    overflow-y: hidden;
+} */
 .addImage .form-group
 { 
-    padding-left:50%;
-    margin:1em;
+    padding-left:50%; 
+     margin:1em;
 }
 .addImage input[type=file]
 {

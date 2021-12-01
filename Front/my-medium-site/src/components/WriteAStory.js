@@ -88,7 +88,8 @@ class WriteAStory extends React.Component{
                // console.log(JSON.stringify(this.state))
 
                 console.log(await response.json())
-            }
+                window.location = '/'
+              }
             
 async handleForm(e) {
     e.preventDefault()
@@ -130,17 +131,17 @@ async handleForm(e) {
                                             <input type="text"  className="myText" placeholder="Title" name="header"/>
                                             <input type="text"  className="otherText" placeholder="Chort description" name="description"/>
                                               <div className="d-flex justify-content-around">
-                                            <div className="addImage">
-                                                <div className="form-group">
-                                                    <label className="label">
-                                                        <i><img style={{maxWidth:'100%'}} src={upload} alt="..."></img></i>
-                                                        <span className="title">Add an image</span>
-                                                        <input type="file" name="postPhoto" accept="image/image/png,image/gif,image/jpeg,image/jpg,image/svg" onChange={this.handleFileInputChange}/>
-                                                    </label>
+                                                <div className="addImage">
+                                                    <div className="form-group">
+                                                        <label className="label">
+                                                            <i><img style={{maxWidth:'100%'}} src={upload} alt="..."></img></i>
+                                                            <span className="title">Add an image</span>
+                                                            <input type="file" name="postPhoto" accept="image/image/png,image/gif,image/jpeg,image/jpg,image/svg" onChange={this.handleFileInputChange}/>
+                                                        </label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                              {photoHere}
-                                            </div>
+                                                  {photoHere}
+                                                </div>
                                             {/* <input name="photo_Base64" type="file" className="form-control" /> */}
                                             <textarea className="myTextarea"  placeholder="Article" name="article"/>
                                     </div>

@@ -17,7 +17,7 @@ namespace MyMediumSite.Models
         public string NickName { get; set; }
         public string LinkOnProfile { get; set; }
         public int MyFollowers { get; set; }
-        public string I_Follow { get; set; }
+        public int I_Follow { get; set; }
         //public byte[] ProfilePhoto { get; set; }
         [ForeignKey("UserId")]
         public string UserId { get; set; }

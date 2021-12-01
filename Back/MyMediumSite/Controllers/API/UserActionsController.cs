@@ -69,8 +69,20 @@ namespace MyMediumSite.Controllers.API
                 var user = await userManager.FindByIdAsync(model.SubscriberId);
                 if (user != null)
                 {
-                    datasContext.Subscribers.Add(new Subscriber {UserId= model.SubscriberId, /*SubscriberId = model.SubscriberId*/ SubscribeToId = model.SubscribeOnId });
+                    datasContext.Subscribers.Add(new Subscriber {UserId= model.SubscriberId, SubscribeToId = model.SubscribeOnId });
                     datasContext.SaveChanges();
+
+                    var myProfileToEdit = datasContext.Profiles.ToList().Find(x=> x.UserId == model.SubscriberId);
+                    myProfileToEdit.I_Follow += 1;
+
+                    datasContext.Profiles.Update(myProfileToEdit);
+
+                    var subscriptionProfile= datasContext.Profiles.ToList().Find(x => x.UserId == model.SubscribeOnId);
+                    subscriptionProfile.MyFollowers +=1;
+                    datasContext.Profiles.Update(subscriptionProfile);
+                    datasContext.SaveChanges();
+
+
                     return Ok(model);
                 }
                

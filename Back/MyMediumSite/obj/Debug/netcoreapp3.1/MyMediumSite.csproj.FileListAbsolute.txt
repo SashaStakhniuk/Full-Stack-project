@@ -159,7 +159,6 @@ E:\Sasha\React\MyMediumSite\MyMediumSite\Back\MyMediumSite\bin\Debug\netcoreapp3
 E:\Sasha\React\MyMediumSite\MyMediumSite\Back\MyMediumSite\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 E:\Sasha\React\MyMediumSite\MyMediumSite\Back\MyMediumSite\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 E:\Sasha\React\MyMediumSite\MyMediumSite\Back\MyMediumSite\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-E:\Sasha\React\MyMediumSite\MyMediumSite\Back\MyMediumSite\obj\Debug\netcoreapp3.1\MyMediumSite.csprojAssemblyReference.cache
 E:\Sasha\React\MyMediumSite\MyMediumSite\Back\MyMediumSite\obj\Debug\netcoreapp3.1\staticwebassets\MyMediumSite.StaticWebAssets.Manifest.cache
 E:\Sasha\React\MyMediumSite\MyMediumSite\Back\MyMediumSite\obj\Debug\netcoreapp3.1\staticwebassets\MyMediumSite.StaticWebAssets.xml
 E:\Sasha\React\MyMediumSite\MyMediumSite\Back\MyMediumSite\obj\Debug\netcoreapp3.1\MyMediumSite.MvcApplicationPartsAssemblyInfo.cache
