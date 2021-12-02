@@ -96,31 +96,7 @@ namespace MyMediumSite.Controllers.API
         [HttpPut]
         public async Task<ActionResult<User>> Put(User user)
         {
-            //if (string.IsNullOrEmpty(bike.BikeTitle))
-            //{
-            //    ModelState.AddModelError("TitleError", "Enter the title");
-
-            //}
-            //if (string.IsNullOrEmpty(bike.PhotoPath))
-            //{
-            //    ModelState.AddModelError("PhotoPathError", "Enter the photoPath");
-            //}
-            //if (bike.Size <= 0)
-            //{
-            //    ModelState.AddModelError("BikeSizeError", "Size must be bigger than 0");
-            //}
-            //if (bike.SpeedCount <= 0)
-            //{
-            //    ModelState.AddModelError("SpeedCountError", "Count of speeds must be bigger than 0");
-            //}
-            //if (bike.WheelDiameter <= 0)
-            //{
-            //    ModelState.AddModelError("WheelDiameterError", "Wheels diameter must be bigger than 0");
-            //}
-            //if (bike.Price <= 0)
-            //{
-            //    ModelState.AddModelError("PriceError", "Price must be bigger than 0");
-            //}
+            
             if (!ModelState.IsValid)
             {
                 //ModelState.AddModelError("DatasModelError", "Please,enter all required datas correctly(all numbers must be >= 0)");

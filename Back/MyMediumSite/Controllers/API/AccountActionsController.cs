@@ -67,6 +67,7 @@ namespace MyMediumSite.Controllers.API
                 else
                 {
                     ModelState.AddModelError("", "Invalid login or password");
+                    return BadRequest(ModelState);
                 }
             }
             return View(model);
@@ -93,45 +94,45 @@ namespace MyMediumSite.Controllers.API
                 //    return BadRequest(ModelState);
                 //}
                 //else
-               // {
-                    User user = new User { Email = model.Email, UserName = model.UserName, LastName = model.LastName};
-                    var result = await userManager.CreateAsync(user, model.Password);
+                // {
+                User user = new User { Email = model.Email, UserName = model.UserName, LastName = model.LastName };
+                var result = await userManager.CreateAsync(user, model.Password);
 
-                    if (result.Succeeded)
+                if (result.Succeeded)
+                {
+                    List<string> role = new List<string>();
+                    var roles = await roleManager.Roles.ToListAsync();
+                    if (roles.Count() == 0)
                     {
-                        List<string> role = new List<string>();               
-                        var roles = await roleManager.Roles.ToListAsync();
-                            if (roles.Count() == 0)
-                            {
-                                await roleManager.CreateAsync(new IdentityRole("MainAdmin"));
-                                await roleManager.CreateAsync(new IdentityRole("Admin"));
-                                await roleManager.CreateAsync(new IdentityRole("User"));
-                                //identityContext.SaveChanges();
-                            }
-                            if (user.Email == "MainAdmin@gmail.com" && user.UserName == "Main" && user.LastName == "Admin")
-                            {
-                                role.Add("MainAdmin");
-                            }
-                            else
-                            {
-                                role.Add("User");
-                            }
-                        await userManager.AddToRolesAsync(user, role);
-                        await signInManager.SignInAsync(user, false);
+                        await roleManager.CreateAsync(new IdentityRole("MainAdmin"));
+                        await roleManager.CreateAsync(new IdentityRole("Admin"));
+                        await roleManager.CreateAsync(new IdentityRole("User"));
+                        //identityContext.SaveChanges();
+                    }
+                    if (user.Email == "MainAdmin@gmail.com" && user.UserName == "Main" && user.LastName == "Admin")
+                    {
+                        role.Add("MainAdmin");
+                    }
+                    else
+                    {
+                        role.Add("User");
+                    }
+                    await userManager.AddToRolesAsync(user, role);
+                    await signInManager.SignInAsync(user, false);
 
 
                     if (user != null)
                     {
-                            datasContext.Profiles.Add(new Profile
-                            {
-                                User = user,
-                                //AboutProfile = model.AboutProfile,
-                                //ProfilePhoto = model.ProfilePhoto,
-                                Name = user.UserName + " " + user.LastName,
-                                NickName = "@" + user.Email.Substring(0, user.Email.IndexOf('@'))
-                            });
-                            datasContext.SaveChanges();
-                        
+                        datasContext.Profiles.Add(new Profile
+                        {
+                            User = user,
+                            //AboutProfile = model.AboutProfile,
+                            //ProfilePhoto = model.ProfilePhoto,
+                            Name = user.UserName + " " + user.LastName,
+                            NickName = "@" + user.Email.Substring(0, user.Email.IndexOf('@'))
+                        });
+                        datasContext.SaveChanges();
+
                         var identity = await GetIdentity(user.Email, model.Password);
                         if (identity == null)
                         {
@@ -148,11 +149,14 @@ namespace MyMediumSite.Controllers.API
                         return Json(new
                         {
                             access_token = encodedJwt,
-                            userId=user.Id
+                            userId = user.Id
                         });
                     }
-                    return Ok();
-                    }
+                    //else
+                    //{
+                    //    return BadRequest(new { error = "There are some error with datas, maybe such user is alreay exist" });
+                    //}
+
                     else
                     {
                         //return ModelState.AddModelError("", error.Description);
@@ -162,10 +166,11 @@ namespace MyMediumSite.Controllers.API
                         //    ModelState.AddModelError("", error.Description);
                         //}
                     }
-                //}
-            }
-            return View(model);
+                    //}
+                }
 
+            }
+            return BadRequest(new { error = "There are some error with datas, maybe such user is already exist" });
         }
         private async Task<ClaimsIdentity> GetIdentity(string email, string password)
         {

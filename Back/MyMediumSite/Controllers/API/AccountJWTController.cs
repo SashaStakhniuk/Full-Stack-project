@@ -55,7 +55,8 @@ namespace MyMediumSite.Controllers.API
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Invalid login or password");
+                    //ModelState.AddModelError("", "Invalid login or password");
+                    return BadRequest(new { error = "Invalid login or password" });
                 }
             }
             return View(model);

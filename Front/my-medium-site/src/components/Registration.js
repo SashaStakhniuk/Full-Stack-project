@@ -19,7 +19,8 @@ class Registration extends React.Component{
             email:"",
             password:"",
             confirmPassword:"",
-            loading:""
+            loading:"",
+            error:[]
         }
     }
     async makeRequest(){
@@ -37,11 +38,14 @@ class Registration extends React.Component{
                         sessionStorage.setItem('access_token', data.access_token);
                         sessionStorage.setItem('userId', data.userId);
                         // sessionStorage.setItem('userEmail', data.userEmail);
+                        this.setState({loading:"",error:""})
                         this.props.setCredentials();
                         window.location = '/'
                     } else {
-                        this.setState({loading:""})
-                        console.log("error " + response.status, response.errorText)
+                        this.setState({loading:"",error:data})
+                        // ,()=>console.log(this.state.error)
+                        // console.log("error " + response.status, response.errorText)
+                        console.log(data)
                     }
         }
         catch{
@@ -110,6 +114,9 @@ class Registration extends React.Component{
                                     </div>
                                 </div>
                             <div className="text-center">
+                                <div style={{width:"200px",padding:"auto"}}>
+                                    <div style={{color:"red"}}>{this.state.error.error}</div>
+                                </div>
                                     {animation}
                                 <button className="btn btn-success m-2" style={{minWidth:'60%'}} data-bs-dismiss="modal">Sign-Up</button>
                             </div>                
