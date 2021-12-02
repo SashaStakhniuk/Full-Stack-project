@@ -44,6 +44,17 @@ namespace MyMediumSite.Controllers.API
         {
             return await datasContext.Posts.ToListAsync();
         }
+        [HttpGet("{postsAmount}")]
+        public ActionResult<IEnumerable<Posts>> GetSomePosts(string postsAmount)
+        {
+            if(!String.IsNullOrEmpty(postsAmount))
+            {
+                var post = Int32.Parse(postsAmount);
+                return  datasContext.Posts.Skip(post).Take(3).ToList();
+
+            }
+            return BadRequest("Error with entered datas");
+        }
         // [HttpGet]
         //public async Task<ActionResult<IEnumerable<Posts>>> GetAllPosts()
         //{
