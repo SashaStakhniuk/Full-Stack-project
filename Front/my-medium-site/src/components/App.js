@@ -254,7 +254,6 @@ componentDidMount(){
 }
 componentWillUnmount(){
   document.removeEventListener('scroll',this.scrollHandler)
-
 }
 scrollHandler=(e)=>{
   if(e.target.documentElement.scrollHeight-(e.target.documentElement.scrollTop+window.innerHeight)<50){
@@ -292,6 +291,7 @@ scrollHandler=(e)=>{
               
              this.setState({
                posts:[...this.state.posts,...data],
+               loading:true,
                loaded:true
               },()=>console.log(this.state.posts))
           
