@@ -39,11 +39,31 @@ namespace MyMediumSite.Controllers.API
             if (id != null)
             {
                 var profile = datasContext.Profiles.ToList().Find(x => x.UserId == id);
-                //var profile = datasContext.Posts.ToList().FirstOrDefault();
                 return Ok(profile);
             }
             return NotFound();
         }
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<IEnumerable<Profile>>> GetUserSubscriptions(string id)
+        //{
+        //    if (id != null)
+        //    {
+        //        var subscriptionsIdList = datasContext.Subscribers.ToList().Where(x => x.UserId == id).Select(x=> x.SubscribeToId);
+        //        //var subscriptions = datasContext.Profiles.ToList().Find(x => x.UserId == id);
+        //        //var profile = datasContext.Posts.ToList().FirstOrDefault();
+        //        List<Profile> profiles = new List<Profile>();
+        //        var profile = new Profile();
+        //        foreach(var subscriptionId in subscriptionsIdList)
+        //        {
+        //            //profile = datasContext.Profiles.ToList().Find(x => x.UserId == subscriptionId);
+        //            profile = await datasContext.Profiles.FirstOrDefaultAsync(x => x.UserId == subscriptionId);
+
+        //            profiles.Add(profile);
+        //        }
+        //        return profiles;
+        //    }
+        //    return NotFound();
+        //}
         [HttpPost]
         public async Task<ActionResult<User>> Post(User user)
         {

@@ -12,7 +12,7 @@ namespace MyMediumSite.Config
         public const string ISSUER = "MyMediumSite";
         public const string AUDIENCE = "SomeClient";
         const string KEY = "MyKeyWith_256_BIT_Information";
-        public const int LIFETIME = 20;
+        public const int LIFETIME = 30;
         public static SymmetricSecurityKey GetSymmetricSecurityKey()
         {
             return new SymmetricSecurityKey(Encoding.Default.GetBytes(KEY));

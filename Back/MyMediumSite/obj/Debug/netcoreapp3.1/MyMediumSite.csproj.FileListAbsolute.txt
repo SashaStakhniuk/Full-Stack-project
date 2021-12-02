@@ -178,3 +178,4 @@ E:\Sasha\React\MyMediumSite\MyMediumSite\Back\MyMediumSite\obj\Debug\netcoreapp3
 E:\Sasha\React\MyMediumSite\MyMediumSite\Back\MyMediumSite\obj\Debug\netcoreapp3.1\MyMediumSite.csproj.CopyComplete
 E:\Sasha\React\MyMediumSite\MyMediumSite\Back\MyMediumSite\obj\Debug\netcoreapp3.1\MyMediumSite.dll
 E:\Sasha\React\MyMediumSite\MyMediumSite\Back\MyMediumSite\obj\Debug\netcoreapp3.1\MyMediumSite.pdb
+E:\Sasha\React\MyMediumSite\MyMediumSite\Back\MyMediumSite\obj\Debug\netcoreapp3.1\MyMediumSite.csprojAssemblyReference.cache

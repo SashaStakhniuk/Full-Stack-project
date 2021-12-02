@@ -11,3 +11,27 @@
   width: 50vw;
 
 }
+.userPostsView{
+    width:100%;
+    min-width:80%;
+    padding-left:8%;
+}
+.postsWidth{
+    width:70%;
+}
+/* .hidden{
+    position:fixed;
+} */
+@media (max-width: 768px) {
+    .hidden{
+        display: none;
+    }
+    .userPostsView{
+        min-width:100%;
+        padding: 1%;
+    }
+    .postsWidth{
+        width:100%;
+    }
+}
+

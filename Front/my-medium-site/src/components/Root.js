@@ -18,6 +18,7 @@ import WriteAStory from './WriteAStory';
 import UserPage from './UserPage';
 import AboutUser from './AboutUser';
 import Tag from './Tag';
+import Subscriptions from './Subscriptions';
 
 
 const Root = ({ store }) => (
@@ -83,6 +84,7 @@ const Root = ({ store }) => (
   <Route path="/userdatassettings" component={UserPage}></Route>
   <Route path="/aboutUser/:id" component={AboutUser}></Route>
   <Route path="/tag/:title" component={Tag}></Route>
+  <Route path="/subscriptions" component={Subscriptions}></Route>
 
 
   <Route component={NotFound}></Route>

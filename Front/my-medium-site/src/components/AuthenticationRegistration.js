@@ -1,5 +1,5 @@
 // import {Switch,NavLink,Route, BrowserRouter as Router} from "react-router-dom"
-import {NavLink} from "react-router-dom"
+import {NavLink,Link} from "react-router-dom"
 import React from 'react'
 import {connect} from 'react-redux'
 // import { GoogleLogout } from "react-google-login"
@@ -88,8 +88,18 @@ class AuthenticationRegistration extends React.Component{
             </div>               
           </li> */}
             <li><a className="dropdown-item" href="/writingstory">Write a story</a></li>
-            <li><a className="dropdown-item" href="/">Stories</a></li>
-            <li><a className="dropdown-item" href="/">Stats</a></li>
+            <li><Link className="dropdown-item"
+                        to={{
+                            // pathname:"/aboutUser/"+this.props.credentials.userId,
+                            pathname:"/aboutUser/"+sessionStorage.getItem('userId'),
+                            aboutProps:{}
+                            }}
+                            // exact
+                          > MyStories
+                    </Link>
+            </li>  
+            {/* <li><a className="dropdown-item" href="/">Stories</a></li> */}
+            <li><a className="dropdown-item" href="/subscriptions">Subscriptions</a></li>
             <li><a className="dropdown-item" href="/">Design your profile</a></li>
             <li><a className="dropdown-item" href="/userdatassettings">Settings</a></li>
             {/* <li><a><GoogleLogout clientId="338527283984-4obsta667or3gv1da803kpjk7p6g2rec.apps.googleusercontent.com" buttonText="Logout" onLogoutSuccess={logout}></GoogleLogout></a></li> */}

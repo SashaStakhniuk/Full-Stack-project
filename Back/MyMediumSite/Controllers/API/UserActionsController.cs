@@ -91,6 +91,36 @@ namespace MyMediumSite.Controllers.API
         }
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> UnSubscribe(SubscribeViewModel model)
+        {
+            if (model.SubscribeOnId != null)
+            {
+                var user = await userManager.FindByIdAsync(model.SubscriberId);
+                if (user != null)
+                {
+                    var subscriptionToDelete = datasContext.Subscribers.ToList().Where(x => x.UserId == model.SubscriberId).Where(x=> x.SubscribeToId==model.SubscribeOnId).FirstOrDefault();
+                    datasContext.Subscribers.Remove(subscriptionToDelete);
+                    datasContext.SaveChanges();
+
+                    var myProfileToEdit = datasContext.Profiles.ToList().Find(x => x.UserId == model.SubscriberId);
+                    myProfileToEdit.I_Follow -= 1;
+
+                    datasContext.Profiles.Update(myProfileToEdit);
+
+                    var subscriptionProfile = datasContext.Profiles.ToList().Find(x => x.UserId == model.SubscribeOnId);
+                    subscriptionProfile.MyFollowers -= 1;
+                    datasContext.Profiles.Update(subscriptionProfile);
+                    datasContext.SaveChanges();
+
+
+                    return Ok(model);
+                }
+
+            }
+            return NotFound(model);
+        }
+        [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult AddNewStory(PostsViewModel model)
         {
             //if (ModelState.IsValid)
@@ -142,7 +172,42 @@ namespace MyMediumSite.Controllers.API
             //}
             // return BadRequest(model);
         }
+        [HttpGet("{id}")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<IEnumerable<Profile>>> GetUserSubscriptions(string id)
+        {
+            if (id != null)
+            {
+                var subscriptionsIdList = datasContext.Subscribers.ToList().Where(x => x.UserId == id).Select(x => x.SubscribeToId);
+                List<Profile> profiles = new List<Profile>();
+                var profile = new Profile();
+                foreach (var subscriptionId in subscriptionsIdList)
+                {
+                    profile = await datasContext.Profiles.FirstOrDefaultAsync(x => x.UserId == subscriptionId);
 
+                    profiles.Add(profile);
+                }
+                return profiles;
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public ActionResult<bool> CheckUserSubscriptions(SubscribeViewModel model)
+        {
+            if (model != null)
+            {
+                //var checkSubscriptionsList = datasContext.Subscribers.ToList().Where(x=> x.UserId==model.SubscriberId).Select(x=> x.SubscribeToId);
+                var isSubscribed = datasContext.Subscribers.ToList().Where(x => x.UserId == model.SubscriberId).Where(x=> x.SubscribeToId == model.SubscribeOnId).FirstOrDefault();
+                if (isSubscribed != null)
+                {
+                    return true;
+                }
+                return false;
+            }
+            return NotFound();
+        }
 
     }
 }

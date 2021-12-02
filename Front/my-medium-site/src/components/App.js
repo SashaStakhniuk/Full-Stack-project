@@ -136,17 +136,17 @@ render(){
       {posts}
       <div id="right"  className="col-md-5">
       Themes Here:
-
+        <div className="fixed">
         <div style={{padding: "3%"}}>
           <h4>DISCOVER MORE OF WHAT MATTERS TO YOU</h4>
 
-          <div className="row row-cols-3">
+          <div className="row row-cols-2">
             {/* {this.state.posts.map((post)=>
               <div className="btn btn-outline-secondary col-sm m-1">{post.theme}</div>
             )} */}
             {checkedThemes.map((theme)=>
                 <NavLink
-                className="btn btn-outline-secondary col-sm m-1"
+                className="btn btn-outline-secondary m-1 col"
                 style={{textDecoration:"none",color:"black"}}
                         to={{
                             pathname:"/tag/"+theme,
@@ -162,6 +162,7 @@ render(){
           </div>
         </div>
       </div>
+    </div>
     </div>
     </div>
   : 
