@@ -50,9 +50,9 @@ class Subscriptions extends React.Component{
         return(
             <div>
                 {this.state.subscribedOn.length>0?
-                <div>
-                    {this.state.subscribedOn.map(user=>
-                        <div className="row row-cols-xl-4 row-cols-md-3 row-cols-sm-2 row-cols-1 m-5">
+                    <div className="row row-cols-xl-4 row-cols-md-3 row-cols-sm-2 row-cols-1 m-5">
+                        {this.state.subscribedOn.map(user=>
+                        <div className='container'>
                              <NavLink
                                 to={{
                                     pathname:"/aboutUser/"+user.userId,

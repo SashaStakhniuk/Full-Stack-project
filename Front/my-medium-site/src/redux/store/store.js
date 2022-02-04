@@ -12,6 +12,7 @@ const InitialStore={
     // credentials,
     // posts:[]
 }
+// const store = createStore(SetCredentialsReducer, window?.__REDUX_DEVTOOLS_EXTENSION__?.())
 
-const store=createStore(SetCredentialsReducer,InitialStore)
+ const store=createStore(SetCredentialsReducer,InitialStore)
 export default store

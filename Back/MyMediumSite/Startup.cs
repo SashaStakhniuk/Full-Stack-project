@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,14 +15,13 @@ using MyMediumSite.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MyMediumSite
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public IConfiguration Configuration { get; }
         public Startup(IConfiguration configuration)
         {
@@ -34,16 +35,38 @@ namespace MyMediumSite
 
 
             var myMediumSiteConfiguration = Configuration.GetConnectionString("MediumDB");
-            services.AddDbContext<DatasContext>(options => options.UseSqlServer(myMediumSiteConfiguration));
+            services.AddDbContext<DatasDbContext>(options => options.UseSqlServer(myMediumSiteConfiguration));
+
+
+           
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
+            //services.Configure<IdentityOptions>(opts =>
+            //{
+            //    opts.User.RequireUniqueEmail = true;
+            //    //opts.Password.RequiredLength = 8;
+
+            //    opts.SignIn.RequireConfirmedEmail = true;
+            //});
+            services.AddIdentityCore<User>()
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<IdentityContext>()
+            .AddSignInManager()
+            .AddTokenProvider(TokenOptions.DefaultProvider, typeof(DataProtectorTokenProvider<User>))
+            .AddTokenProvider(TokenOptions.DefaultEmailProvider, typeof(EmailTokenProvider<User>))
+            .AddTokenProvider(TokenOptions.DefaultPhoneProvider, typeof(PhoneNumberTokenProvider<User>))
+            .AddTokenProvider(TokenOptions.DefaultAuthenticatorProvider, typeof(AuthenticatorTokenProvider<User>));
 
 
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
+            })
+            //.AddCookie()
+            .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -55,15 +78,39 @@ namespace MyMediumSite
                     ValidateIssuerSigningKey = true,
                     ClockSkew = TimeSpan.Zero//time token alive
                 };
-            });
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
 
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                        {
+                            context.Response.Headers.Add("Token-Expired", "true");
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+            })
+            .AddGoogle(options =>
+            {
+                options.ClientId = Configuration["GoogleAPIDatas:ClientId"];
+                options.ClientSecret = Configuration["GoogleAPIDatas:ClientSecret"];
+                options.SaveTokens = true;
+                options.AccessType = "offline";
+                //options.CallbackPath = "/api/accountactions/ExternalLoginCallback";               
+            });
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.Unspecified;
+            });
 
             services.AddControllersWithViews();
             services.AddSession();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCors(builder => builder

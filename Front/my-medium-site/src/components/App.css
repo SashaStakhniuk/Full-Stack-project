@@ -49,3 +49,13 @@ line-height: 100vh;
  height:100px;
  margin: -50px 0 0 -100px; */
 }
+.likeDislikePosition{
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 1%;
+}
+@media screen and (min-width: 900px) {
+    .likeDislikePosition{
+        justify-content: flex-end;
+    }
+  }

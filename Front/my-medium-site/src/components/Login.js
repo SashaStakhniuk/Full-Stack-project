@@ -18,6 +18,7 @@ class Login extends React.Component{
         super(props)
         this.handleForm=this.handleForm.bind(this)
         this.makeRequest=this.makeRequest.bind(this)
+        // this.getCookie=this.getCookie.bind(this)
 
         this.state={
             email:"",
@@ -25,6 +26,27 @@ class Login extends React.Component{
             error:"",
             loading:""
         }
+    }
+    //  getCookie(cookieName) {
+    //     let cookie = {};
+    //     document.cookie.split(';').forEach(function(el) {
+    //       let [key,value] = el.split('=');
+    //       cookie[key.trim()] = value;
+    //     })
+    //     return cookie[cookieName];
+    //   }
+      
+       componentDidMount() {
+           if(this.props.match.params.userId && this.props.match.params.access_token)
+           {
+            console.log(this.props.match.params.userId);
+            sessionStorage.setItem('userId', this.props.match.params.userId);
+            sessionStorage.setItem('access_token', this.props.match.params.access_token);
+
+            window.location="/";
+           }
+        
+
     }
     async makeRequest(){
         try{
@@ -49,7 +71,9 @@ class Login extends React.Component{
                         // <AuthenticationRegistration authorized={true}></AuthenticationRegistration>
                     } else {
                         // window.location = '/authorization'
-                        this.setState({error:"Invalid email or password",loading:""})
+                        // this.setState({error:"Invalid email or password",loading:""})
+                        this.setState({error:data.error,loading:""})
+                        console.log(data);
                         console.log(response.status, response.errorText)
                     }
         
@@ -99,9 +123,11 @@ class Login extends React.Component{
                                             <label htmlFor="password" className="form__label">Password</label>
                                         </div>
                                     </div>
+                                    
                                 <div className="text-center">
                                         {animation}
                                     <div style={{color:"red"}}>{this.state.error}</div>
+                                    
                                     <button className="btn btn-success m-2" style={{minWidth:'60%'}}>Sign-In</button>
                                     {/* <a className="btn btn-success m-2" style={{minWidth:'60%'}} style={{textDecoration: 'none', color:'white'}} href="/">Sign-In</a> */}
 
@@ -112,10 +138,21 @@ class Login extends React.Component{
                             <div className="d-flex flex-row justify-content-around m-1">
                                 {/* <GoogleLoginClass/> */}
                                 {/* <GoogleLoginClass/> */}
-
-                                {/* <button type="button" className="login-with-google-btn m-1" >
-                                    Sign in with Google
-                                </button> */}
+                                <form method='POST' action={`https://localhost:44361/api/accountactions/ExternalLogin?provider=Google&returnUrl=`} >
+                                    <button
+                                        className="login-with-google-btn m-1"
+                                        type="submit"
+                                        name='provider'
+                                        value='Google'
+                                        title={`Login using Google`}>
+                                        <img src='link-to-google-logo' alt="" />
+                                        Sign in with Google
+                                    </button>
+                                </form>
+                                {/* <a href="https://www.google.com/accounts/Logout">
+                                    <button >Logout</button>
+                                </a> */}
+                                
                                     {/* <div class="effect aeneas">
                                         <div className="buttons">
                                         <a href={"s"}  className="fb" title="Log-In with Facebook"><i><img style={{width:"100%"}} src={fb} alt="fb"></img></i></a>
@@ -125,6 +162,11 @@ class Login extends React.Component{
                             </div>
                             <hr/>
                             {/* <div data-bs-dismiss="modal"> */}
+                            <div className="text-center">
+                                        <a href="/passwordreset">
+                                            <button className="btn btn-warning">Forgot password</button>
+                                        </a>
+                                    </div>
                             <div className="text-center">
                                     <NavLink className="btn btn-secondary" to="/authorization">I don't have an account</NavLink>
                             </div>

@@ -76,7 +76,8 @@ class WriteAStory extends React.Component{
         // });
       };
  sendDatasOnServer = async function(url){
-  console.log(this.props.credentials.tokenKey)
+  //console.log(this.props.credentials.tokenKey)
+  console.log(this.state);
                 const response=await fetch(url, {
                     method: 'POST',
                     headers: {

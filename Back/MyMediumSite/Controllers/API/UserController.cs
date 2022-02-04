@@ -18,8 +18,8 @@ namespace MyMediumSite.Controllers.API
     {
         private readonly IdentityContext context;
         private readonly UserManager<User> userManager;
-        private readonly DatasContext datasContext;
-        public UserController(IdentityContext context, UserManager<User> userManager, DatasContext datasContext)
+        private readonly DatasDbContext datasContext;
+        public UserController(IdentityContext context, UserManager<User> userManager, DatasDbContext datasContext)
         {
             this.context = context;
             this.userManager = userManager;

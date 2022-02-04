@@ -9,6 +9,10 @@ namespace MyMediumSite.Models
 {
     public class Profile
     {
+        //public Profile()
+        //{
+        //    LikesDislikes = new HashSet<LikeDislike>();
+        //}
         [Key]
         public int ProfileId { get; set; }
         public string AboutProfile { get; set; }
@@ -22,6 +26,9 @@ namespace MyMediumSite.Models
         [ForeignKey("UserId")]
         public string UserId { get; set; }
         public User User { get; set; }
+
+        //public ICollection<LikeDislike> LikesDislikes;
+
         //public virtual User User { get; set; }
 
     }

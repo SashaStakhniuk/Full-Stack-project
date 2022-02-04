@@ -1,6 +1,7 @@
 import React from "react";
 import './writingStory.css';
 import upload from '../images/upload.svg.png'
+// import ChangeUserPassword from "./ChangeUserPassword";
 
 class UserPage extends React.Component{
 
@@ -23,6 +24,7 @@ class UserPage extends React.Component{
             userId:sessionStorage.getItem("userId")
         })
         this.token=sessionStorage.getItem("access_token")
+        // console.log(this.props.match.params.passwordChanged)
     }
     getBase64 = file => {
         return new Promise(resolve => {
@@ -119,6 +121,11 @@ class UserPage extends React.Component{
                      <button style={{minWidth:"40%"}} className="btn btn-success">Add Datas</button>
                     </div>
                 </form>
+                <hr/>
+                <div class='text-center'>
+                    <h3>Change password</h3>
+                </div>
+                {/* {<ChangeUserPassword message={this.props.match.params.passwordChanged}></ChangeUserPassword>} */}
             </div>
         )
     }

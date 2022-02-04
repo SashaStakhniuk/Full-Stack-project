@@ -19,6 +19,9 @@ import UserPage from './UserPage';
 import AboutUser from './AboutUser';
 import Tag from './Tag';
 import Subscriptions from './Subscriptions';
+import PostsDetails from './PostDetails';
+import EmailConfirmation from './EmailConfirmation';
+import ChangeUserPassword from './ChangeUserPassword';
 
 
 const Root = ({ store }) => (
@@ -79,11 +82,16 @@ const Root = ({ store }) => (
   <Route exact path="/" component={App}></Route>
   <Route path="/users" component={Users}></Route>
   <Route path="/authorization" component={Registration}></Route>
-  <Route path="/authentication" component={Login}></Route>
+  <Route path="/authentication/:userId?/:access_token?" component={Login}></Route>
+  {/* <Route path="/passwordreset/:email?/:token?" component={ChangeUserPassword}></Route> */}
+  <Route path="/passwordreset" component={ChangeUserPassword}></Route>
+
+  <Route path="/emailConfirmation" component={EmailConfirmation}></Route>
   <Route path="/writingstory" component={WriteAStory}></Route>
-  <Route path="/userdatassettings" component={UserPage}></Route>
+  <Route path="/userdatassettings/:passwordChanged?" component={UserPage}></Route>
   <Route path="/aboutUser/:id" component={AboutUser}></Route>
-  <Route path="/tag/:title" component={Tag}></Route>
+  <Route path="/tag/:title?" component={Tag}></Route>
+  <Route path="/posts/:id?" component={PostsDetails}></Route>
   <Route path="/subscriptions" component={Subscriptions}></Route>
 
 

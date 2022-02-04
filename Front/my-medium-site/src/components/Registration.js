@@ -80,6 +80,7 @@ class Registration extends React.Component{
             <div>
             <div className="centerRegister">
                 <div className="borderRegister">
+                    
                 <div className="text-center" style={{fontWeight:'bolder'}}>Sign-Up</div>
                     <form onSubmit={this.handleForm}>
                                 <div className="row m-1">
@@ -121,6 +122,21 @@ class Registration extends React.Component{
                                 <button className="btn btn-success m-2" style={{minWidth:'60%'}} data-bs-dismiss="modal">Sign-Up</button>
                             </div>                
                         </form>
+                        <hr/>
+
+                        <div style={{textAlign:"center"}}>
+                    <form method='POST' action={`https://localhost:44361/api/accountactions/ExternalLogin?provider=Google&returnUrl=`} >
+                                    <button
+                                        className="login-with-google-btn m-1"
+                                        type="submit"
+                                        name='provider'
+                                        value='Google'
+                                        title={`Login using Google`}>
+                                        <img src='link-to-google-logo' alt="" />
+                                        Sign Up with Google
+                                    </button>
+                                </form>
+                    </div>
                         <hr/>
                         <div className="text-center">
                         <div>

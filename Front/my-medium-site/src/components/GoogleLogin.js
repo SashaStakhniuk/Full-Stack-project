@@ -6,8 +6,10 @@ class GoogleLoginClass extends React.Component{
   // }
   responseGoogle=(response)=>{
     console.log(response);
-    console.log(response.ProfileObj);
-
+    //console.log(response.ProfileObj);
+    // sessionStorage.setItem('access_token', response.accessToken);
+    // sessionStorage.setItem('userId', response.googleId);
+    // window.location = '/';
   }
   render(){
     return(

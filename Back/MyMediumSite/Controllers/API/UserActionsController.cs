@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -27,9 +28,9 @@ namespace MyMediumSite.Controllers.API
         private readonly UserManager<User> userManager;
         //private readonly SignInManager<User> signInManager;
         private readonly IdentityContext identityContext;
-        private readonly DatasContext datasContext;
+        private readonly DatasDbContext datasContext;
 
-        public UserActionsController(DatasContext datasContext, IdentityContext identityContext, UserManager<User> userManager/*, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager,*/ )
+        public UserActionsController(DatasDbContext datasContext, IdentityContext identityContext, UserManager<User> userManager/*, SignInManager<User> signInManager, RoleManager<IdentityRole> roleManager,*/ )
         {
             this.userManager = userManager;
             //    this.roleManager = roleManager;
@@ -50,11 +51,33 @@ namespace MyMediumSite.Controllers.API
             if(!String.IsNullOrEmpty(postsAmount))
             {
                 var post = Int32.Parse(postsAmount);
+                //return datasContext.Posts.ToList().OrderByDescending(x=> x.Rating).Skip(post).Take(3).ToList();
                 return  datasContext.Posts.Skip(post).Take(3).ToList();
 
             }
-            return BadRequest("Error with entered datas");
+            return BadRequest(new { error = "Error with entered datas" });
         }
+        [HttpGet("{postsAmount}")]
+        public ActionResult<IEnumerable<Posts>> GetSomePostsByRating(string postsAmount)
+        {
+            if (!String.IsNullOrEmpty(postsAmount))
+            {
+                var post = Int32.Parse(postsAmount);
+                return datasContext.Posts.ToList().OrderByDescending(x=> x.Rating).Skip(post).Take(3).ToList();
+            }
+            return BadRequest(new { error = "Error with entered datas" });
+        }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<string>>> GetAllThemes()
+        {
+            var themes = await datasContext.Posts.Select(x => x.Theme).Distinct().ToListAsync();
+
+            //var themes = await datasContext.Posts.Select(x => x.Theme).ToListAsync();
+            //themes = themes.Distinct().ToList();
+            return themes;
+            // return await datasContext.Posts.Select(x=> x.Theme).ToListAsync();
+        }
+
         // [HttpGet]
         //public async Task<ActionResult<IEnumerable<Posts>>> GetAllPosts()
         //{
@@ -70,6 +93,30 @@ namespace MyMediumSite.Controllers.API
         public async Task< ActionResult<IEnumerable<Posts>>> GetPostsByTheme(string theme)
         {
             return await datasContext.Posts.Where(x=> x.Theme.ToLower()==theme.ToLower()).ToListAsync();
+        }
+        [HttpGet("{theme}/{postsAmount}")]
+        public ActionResult<IEnumerable<Posts>> GetSomePostsByTheme(string theme,string postsAmount="")
+        {
+            if (!String.IsNullOrEmpty(postsAmount))
+            {
+                var post = Int32.Parse(postsAmount);
+                //var posts = datasContext.Posts.Where(x => x.Theme.ToLower() == theme.ToLower()).Skip(post).Take(3).ToList();
+
+                return datasContext.Posts.Where(x => x.Theme.ToLower() == theme.ToLower()).Skip(post).Take(3).ToList();
+
+            }
+            return BadRequest("Error with entered datas");
+        }
+        [HttpGet("{id}")]
+        public ActionResult<Posts> GetPostById(int id)
+        {
+
+            //var posts = datasContext.Posts.Where(x => x.Theme.ToLower() == theme.ToLower()).Skip(post).Take(3).ToList();
+
+            return datasContext.Posts.FirstOrDefault(x=> x.PostsId==id);// Where(x => x.Theme.ToLower() == theme.ToLower()).Skip(post).Take(3).ToList();
+
+            
+            //return BadRequest("Error with entered datas");
         }
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -132,6 +179,7 @@ namespace MyMediumSite.Controllers.API
         }
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public IActionResult AddNewStory(PostsViewModel model)
         {
             //if (ModelState.IsValid)
@@ -168,10 +216,24 @@ namespace MyMediumSite.Controllers.API
                 //                                        NickName = "@" + user.Email.Substring(0, user.Email.IndexOf('@'))
                 //});
                 var profileToEdit = datasContext.Profiles.ToList().Find(x=> x.UserId==model.UserId);
-                profileToEdit.AboutProfile = model.AboutProfile;
-                profileToEdit.ProfilePhoto = model.ProfilePhoto;
-                
-                datasContext.Profiles.Update(profileToEdit);
+                if (profileToEdit==null)
+                {
+                    datasContext.Profiles.Add(new Profile
+                    {
+                        User = user,
+                        AboutProfile = model.AboutProfile,
+                        ProfilePhoto = model.ProfilePhoto,
+                        Name = user.UserName + " " + user.LastName,
+                        NickName = "@" + user.Email.Substring(0, user.Email.IndexOf('@'))
+                    });
+                }else
+                {
+                    profileToEdit.AboutProfile = model.AboutProfile;
+                    profileToEdit.ProfilePhoto = model.ProfilePhoto;
+                    datasContext.Profiles.Update(profileToEdit);
+                }
+
+
                 datasContext.SaveChanges();
                 return Ok(model);
             }
@@ -219,6 +281,200 @@ namespace MyMediumSite.Controllers.API
             }
             return NotFound();
         }
+        [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult> LikePost(LikeDislikeViewModel model)
+        {
+            if(model.UserId!=null)
+            {
+                if (model.PostId > 0)
+                {
+                    var postToEdit = datasContext.Posts.ToList().FirstOrDefault(x => x.PostsId == model.PostId);
+                    if (postToEdit != null)
+                    {
+                        var likeDislikeToEdit = await datasContext.LikesDislikes.FirstOrDefaultAsync(x=> x.UserId==model.UserId && x.PostId==model.PostId);
+                        if (likeDislikeToEdit != null)
+                        {
+                            if (likeDislikeToEdit.Dislike)
+                            {
+                                postToEdit.Rating += 2;
+                            }
+                            else
+                            {
+                                postToEdit.Rating -= 1;
+                                datasContext.Posts.Update(postToEdit);
+                                datasContext.LikesDislikes.Remove(likeDislikeToEdit);
+                                await datasContext.SaveChangesAsync();
+                                return BadRequest(new
+                                { success = "Like was deleted",
+                                  likesCount = await GetPostLikesCount(postToEdit.PostsId),
+                                  dislikesCount=await GetPostDislikesCount(postToEdit.PostsId)
+                                });
+                                
+                                //return BadRequest(new { success = "Like was deleted"});
+                            }
+                            likeDislikeToEdit.Like = true;
+                            likeDislikeToEdit.Dislike = false;
+                        }
+                        else
+                        {
+                            //postToEdit.Liked += 1;
+                            postToEdit.Rating += 1;
 
+                            likeDislikeToEdit = new LikeDislike
+                            {
+                                UserId = model.UserId,
+                                PostId = model.PostId,
+                                Like = true,
+                                Dislike = false,
+                                Posts = postToEdit,
+                                //Profile = await datasContext.Profiles.FirstOrDefaultAsync(x => x.UserId == model.UserId)
+                            };
+
+                        }
+                        datasContext.Posts.Update(postToEdit);
+                        datasContext.LikesDislikes.Update(likeDislikeToEdit);
+                        await datasContext.SaveChangesAsync();
+                        int likesCount = await GetPostLikesCount(postToEdit.PostsId);
+                        return Ok(new
+                        {
+                            success = "Post was liked",
+                            likesCount = await GetPostLikesCount(postToEdit.PostsId),
+                            dislikesCount = await GetPostDislikesCount(postToEdit.PostsId)
+                        });
+                        //return Ok(new { success = "Post was liked" });
+                    }
+
+                }
+                return BadRequest(new { error = "No such post" });
+            }
+            else
+            {
+                return BadRequest(new { error = "No such user" });
+            }
+
+        }
+        [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult> DislikePost(LikeDislikeViewModel model)
+        {
+            if (model.UserId != null)
+            {
+                if (model.PostId > 0)
+                {
+                    var postToEdit = datasContext.Posts.ToList().FirstOrDefault(x => x.PostsId == model.PostId);
+                    if (postToEdit != null)
+                    {
+                       
+
+                        var likeDislikeToEdit = await datasContext.LikesDislikes.FirstOrDefaultAsync(x => x.UserId == model.UserId && x.PostId == model.PostId);
+                        if (likeDislikeToEdit != null)
+                        {
+                            if (likeDislikeToEdit.Like)
+                            {
+                                postToEdit.Rating -= 2;
+                            }
+                            else
+                            {
+                                postToEdit.Rating += 1;
+                                datasContext.Posts.Update(postToEdit);
+                                datasContext.LikesDislikes.Remove(likeDislikeToEdit);
+                                await datasContext.SaveChangesAsync();
+                                //int dislikesCount = await GetPostDislikesCount(postToEdit.PostsId);
+                                return BadRequest(new 
+                                { success = "Dislike was deleted",
+                                  dislikesCount = await GetPostDislikesCount(postToEdit.PostsId),
+                                  likesCount = await GetPostLikesCount(postToEdit.PostsId)
+                                });
+                            }
+                            likeDislikeToEdit.Like = false;
+                            likeDislikeToEdit.Dislike = true;
+                        }
+                        else
+                        {
+                            //postToEdit.Disliked -= 1;
+                            postToEdit.Rating -= 1;
+
+                            likeDislikeToEdit = new LikeDislike
+                            {
+                                UserId = model.UserId,
+                                PostId = model.PostId,
+                                Like = false,
+                                Dislike = true,
+                                Posts = postToEdit,
+                                //Profile = await datasContext.Profiles.FirstOrDefaultAsync(x => x.UserId == model.UserId)
+                            };
+                        }
+                        datasContext.Posts.Update(postToEdit);
+                        datasContext.LikesDislikes.Update(likeDislikeToEdit);
+                        await datasContext.SaveChangesAsync();
+                        return Ok(new
+                        {
+                            success = "Post was disliked",
+                            dislikesCount = await GetPostDislikesCount(postToEdit.PostsId),
+                            likesCount = await GetPostLikesCount(postToEdit.PostsId)
+                        });
+
+                        //return Ok(new { success = "Post was disliked" });
+
+                    }
+                }
+                return BadRequest(new { error = "No such post" });
+            }
+            return BadRequest(new { error = "No such user" });
+        }
+       
+        private async Task<int> GetPostLikesCount(int postId)
+        {
+            var likesCount = await datasContext.LikesDislikes.Where(x => x.PostId == postId && x.Like == true).ToListAsync();
+            return likesCount!=null ? likesCount.Count() : 0;
+        }
+        private async Task<int> GetPostDislikesCount(int postId)
+        {
+            var disikesCount = await datasContext.LikesDislikes.Where(x => x.PostId == postId && x.Dislike == true).ToListAsync();
+            return disikesCount != null ? disikesCount.Count() : 0;
+        }
+
+        [HttpPost]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult> GetPostLikesAndDislikesCount(LikeDislikeViewModel model)
+        {
+            var likesCount = await datasContext.LikesDislikes.Where(x=> x.PostId==model.PostId && x.Like==true).ToListAsync();           
+            var dislikesCount = await datasContext.LikesDislikes.Where(x=> x.PostId==model.PostId && x.Dislike==true).ToListAsync();
+            return Ok(new { likesCount = likesCount.Count(), dislikesCount= dislikesCount.Count() });
+        }
+        //[HttpGet]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //public async Task<ActionResult<int>> GetPostDislikesCount(LikeDislikeViewModel model)
+        //{
+        //    var dislikesCount = await datasContext.LikesDislikes.Where(x => x.PostId == model.PostId && x.Dislike== true).ToListAsync();
+        //    return dislikesCount.Count();
+        //}
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<int>> GetPostRating(LikeDislikeViewModel model)
+        {
+            var rating = await datasContext.Posts.Where(x => x.PostsId == model.PostId).Select(x => x.Rating).FirstOrDefaultAsync();
+            return rating;
+        }
+        [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult> CheckingUserPostLiked(LikeDislikeViewModel model)
+        {
+            var liked = await datasContext.LikesDislikes.FirstOrDefaultAsync(x => x.PostId == model.PostId && x.UserId==model.UserId);
+            if(liked!=null)
+            {
+                if (liked.Like == true)
+                {
+                    return Ok(new { message = "liked" });
+                }
+                else
+                {
+                    return Ok(new { message = "disliked" });
+                }
+            }
+            return BadRequest( new { message = "Record doesn't exist"});
+            //  var disliked = await datasContext.LikesDislikes.FirstOrDefaultAsync(x => x.PostId == model.PostId && x.UserId==model.UserId && x.Dislike==true);
+        }
     }
 }

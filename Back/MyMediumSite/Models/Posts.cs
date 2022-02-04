@@ -9,6 +9,10 @@ namespace MyMediumSite.Models
 {
     public class Posts
     {
+        public Posts()
+        {
+            LikesDislikes = new HashSet<LikeDislike>();
+        }
         [Key]
         public int PostsId { get; set; }
         public string Theme { get; set; }
@@ -18,9 +22,14 @@ namespace MyMediumSite.Models
 
         //public byte[] PostPhoto { get; set; }
         public string Article { get; set; }
+        //public int Liked { get; set; }
+        //public int Disliked { get; set; }
+        public int Rating { get; set; }
 
         public string Id { get; set; }
         public virtual User User { get; set; }
+
+        public ICollection<LikeDislike> LikesDislikes;
 
         //public int PersonId { get; set; }
         //public Person Person { get; set; }

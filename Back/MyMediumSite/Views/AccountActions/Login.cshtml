@@ -1,0 +1,51 @@
+﻿@model MyMediumSite.Models.ViewModels.LoginViewModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="modal-body">
+    <div class="container-fluid">
+        <section class="signup">
+            <!-- <img src="images/signup-bg.jpg" alt=""> -->
+            <div class="container">
+                <div class="signup-content">
+                    <form method="post" id="signup-form" class="signup-form">
+                        <h2 class="form-title">Sign in</h2>
+                        @Html.ValidationSummary()
+
+                        <div class="form-group">
+                            <input type="email" class="form-input" name="Email" value="@Model.Email" id="email" placeholder="Your Email" />
+                            @Html.ValidationMessageFor(x => x.Email)
+                            @*<div class="form-input" id="email" name="Email">@Html.TextBoxFor(x=> x.Email)</div>*@
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-input" name="Password" value="@Model.Password" id="password" placeholder="Password" />
+                            @Html.ValidationMessageFor(x => x.Password)
+
+                            @*<span toggle="#password" class="zmdi zmdi-eye field-icon toggle-password"></span>*@
+                        </div>
+                        <div class="form-group d-inline">
+                            @Html.LabelFor(x => x.RememberMe)
+                            @Html.CheckBoxFor(x => x.RememberMe)
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" name="submit" id="submit" class="form-submit" value="Sign in" />
+                        </div>
+                    </form>
+                    <p class="loginhere">
+                        Don't have an account ? <a href="~/Account/Register" class="loginhere-link">Create an account</a>
+                    </p>
+                    <p></p>
+                    <div class="display-flex justify-content-center">
+                        <p class="btn btn-secondary">
+                            <a style="color:white;text-decoration: none;" href="~/Home/Index/1">Back to main page</a>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+</div>

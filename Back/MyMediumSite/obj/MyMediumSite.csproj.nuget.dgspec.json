@@ -1,23 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Sasha\\React\\MyMediumSite\\MyMediumSite\\Back\\MyMediumSite\\MyMediumSite.csproj": {}
+    "E:\\Sasha\\React_ASP\\Back\\MyMediumSite\\MyMediumSite.csproj": {}
   },
   "projects": {
-    "E:\\Sasha\\React\\MyMediumSite\\MyMediumSite\\Back\\MyMediumSite\\MyMediumSite.csproj": {
+    "E:\\Sasha\\React_ASP\\Back\\MyMediumSite\\MyMediumSite.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Sasha\\React\\MyMediumSite\\MyMediumSite\\Back\\MyMediumSite\\MyMediumSite.csproj",
+        "projectUniqueName": "E:\\Sasha\\React_ASP\\Back\\MyMediumSite\\MyMediumSite.csproj",
         "projectName": "MyMediumSite",
-        "projectPath": "E:\\Sasha\\React\\MyMediumSite\\MyMediumSite\\Back\\MyMediumSite\\MyMediumSite.csproj",
+        "projectPath": "E:\\Sasha\\React_ASP\\Back\\MyMediumSite\\MyMediumSite.csproj",
         "packagesPath": "C:\\Users\\mainusr\\.nuget\\packages\\",
-        "outputPath": "E:\\Sasha\\React\\MyMediumSite\\MyMediumSite\\Back\\MyMediumSite\\obj\\",
+        "outputPath": "E:\\Sasha\\React_ASP\\Back\\MyMediumSite\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
           "C:\\Users\\mainusr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -30,6 +32,7 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -41,7 +44,12 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.Google": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[3.1.0, )"
@@ -55,6 +63,12 @@
               "version": "[3.1.0, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[3.1.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[3.1.0, )"
             }
@@ -77,7 +91,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.404\\RuntimeIdentifierGraph.json"
         }
       }
     }
